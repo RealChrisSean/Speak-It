@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Speak It</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Speak It</h1>
+      <p class="tagline">Talk naturally, get text instantly</p>
+    </header>
+
+    <div class="main-control">
+      <button id="recordBtn" class="record-btn">
+        <svg class="mic-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+          <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+          <line x1="12" y1="19" x2="12" y2="23"/>
+          <line x1="8" y1="23" x2="16" y2="23"/>
+        </svg>
+        <span class="btn-text">Start Recording</span>
+      </button>
+      <p class="status" id="status">Click a text field, then press the button</p>
+    </div>
+
+    <div class="settings">
+      <h2>Settings</h2>
+
+      <div class="setting-row">
+        <label for="language">Language</label>
+        <select id="language">
+          <option value="en-US">English (US)</option>
+          <option value="en-GB">English (UK)</option>
+          <option value="es-ES">Spanish</option>
+          <option value="fr-FR">French</option>
+          <option value="de-DE">German</option>
+          <option value="it-IT">Italian</option>
+          <option value="pt-BR">Portuguese (Brazil)</option>
+          <option value="ja-JP">Japanese</option>
+          <option value="ko-KR">Korean</option>
+          <option value="zh-CN">Chinese (Simplified)</option>
+        </select>
+      </div>
+
+      <div class="setting-row">
+        <label>
+          <input type="checkbox" id="autoCapitalize" checked>
+          Auto-capitalize sentences
+        </label>
+      </div>
+
+      <div class="setting-row">
+        <label>
+          <input type="checkbox" id="autoPunctuation" checked>
+          Smart punctuation
+        </label>
+      </div>
+
+      <div class="setting-row">
+        <label>
+          <input type="checkbox" id="showInlineMic" checked>
+          Show mic icon on text fields
+        </label>
+      </div>
+    </div>
+
+    <div class="shortcut-hint">
+      <kbd>Alt</kbd> + <kbd>Shift</kbd> + <kbd>S</kbd> to toggle anywhere
+    </div>
+
+    <footer>
+      <a href="https://speakit.app" target="_blank">speakit.app</a>
+    </footer>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

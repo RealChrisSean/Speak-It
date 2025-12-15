@@ -1,0 +1,25 @@
+# Environment
+.env
+.env.local
+.env.*
+
+# Claude instructions
+CLAUDE.md
+
+# Next.js (if backend is added)
+.next/
+node_modules/
+
+# macOS
+.DS_Store
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Build artifacts
+*.zip
+*.crx
+*.pem
