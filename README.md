@@ -19,7 +19,55 @@ Speak It is a Chrome extension that lets you dictate text into any text field on
 
 ## Installation
 
-**Note:** Right now this only works with Chrome and Atlas. If you're using Atlas, you'll need to deploy the backend first. See the [Deploy Your Own Backend](#deploy-your-own-backend) section below.
+**Note:** Right now this only works with Chrome and Atlas.
+
+### Step 1: Deploy the Backend
+
+Click the button to deploy your own backend to Vercel:
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/RealChrisSean/Speak-It&root-directory=backend&env=DEEPGRAM_API_KEY,TIDB_HOST,TIDB_PORT,TIDB_USER,TIDB_PASSWORD,TIDB_DATABASE)
+
+You'll need these environment variables:
+
+| Variable | Description |
+|----------|-------------|
+| `DEEPGRAM_API_KEY` | API key for speech-to-text |
+| `TIDB_HOST` | TiDB Cloud host |
+| `TIDB_PORT` | TiDB port (usually 4000) |
+| `TIDB_USER` | TiDB username |
+| `TIDB_PASSWORD` | TiDB password |
+| `TIDB_DATABASE` | Database name |
+
+**Deepgram** handles the speech-to-text. When browsers like Atlas don't support the Web Speech API, we fall back to Deepgram so the extension still works.
+
+**TiDB** is where we store your speaking style fingerprint. Here's the thing. We want to learn how you speak so we can format your text better over time. But we don't want to store what you actually say. That's your business, not ours. So instead we track things like word count, duration, speaking patterns, and other metadata that helps us understand your style without ever saving your actual words. TiDB is a MySQL-compatible database that scales really well and has a generous free tier. It's perfect for this.
+
+#### Getting a Deepgram API Key
+
+1. Go to [deepgram.com](https://deepgram.com) and sign up (free tier gives you $200 in credits)
+2. In the dashboard, go to **API Keys**
+3. Click **Create a New API Key**
+4. Give it a name and select the permissions (default is fine)
+5. Copy the key. You'll need it for the Vercel deploy.
+
+#### Setting Up TiDB Cloud
+
+TiDB Cloud is where your style data lives. Don't worry, setup is quick.
+
+1. Go to [tidbcloud.com](https://tidbcloud.com) and click **Sign Up**
+2. Sign in with your **GitHub account** (fastest) or use email
+3. Create a new **Serverless** cluster (free tier, no credit card needed)
+4. Pick a region close to your Vercel deployment
+5. Once created, click **Connect** on your cluster
+6. Choose **General** connection type
+7. Copy these values for Vercel:
+   - **Host** goes to `TIDB_HOST`
+   - **Port** goes to `TIDB_PORT` (usually 4000)
+   - **User** goes to `TIDB_USER`
+   - **Password** click "Generate Password" then copy to `TIDB_PASSWORD`
+8. Create a database: In the SQL Editor, run `CREATE DATABASE speakit;` and use `speakit` as your `TIDB_DATABASE`
+
+### Step 2: Install the Extension
 
 1. Clone the repo:
    ```bash
@@ -34,9 +82,14 @@ Speak It is a Chrome extension that lets you dictate text into any text field on
 
 5. Select the `Speak-It` folder (the root folder, not the backend folder)
 
-6. You should see the Speak It extension in your toolbar. Click any text field and the mic icon will appear.
+6. Update `API_BASE` in `content.js` to point to your Vercel URL:
+   ```javascript
+   const API_BASE = 'https://your-app.vercel.app';
+   ```
 
-7. When you first click the mic, Chrome will ask for microphone permission. Click **Allow**.
+7. You should see the Speak It extension in your toolbar. Click any text field and the mic icon will appear.
+
+8. When you first click the mic, Chrome will ask for microphone permission. Click **Allow**.
 
 That's it. You're ready to start talking.
 
@@ -212,66 +265,6 @@ More browsers coming soon.
 3. **Captures thoughts faster**: Don't lose ideas while fumbling with the keyboard.
 4. **Works where you already are**: No new app to learn, no tab switching.
 5. **Free**: No subscription, no limits (when using Web Speech API).
-
----
-
-## Deploy Your Own Backend
-
-The extension needs a backend server for Deepgram fallback (when Web Speech API isn't available). You can deploy your own with one click:
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/RealChrisSean/Speak-It&root-directory=backend&env=DEEPGRAM_API_KEY,TIDB_HOST,TIDB_PORT,TIDB_USER,TIDB_PASSWORD,TIDB_DATABASE)
-
-### Environment Variables
-
-| Variable | Description |
-|----------|-------------|
-| `DEEPGRAM_API_KEY` | API key for speech-to-text |
-| `TIDB_HOST` | TiDB Cloud host |
-| `TIDB_PORT` | TiDB port (usually 4000) |
-| `TIDB_USER` | TiDB username |
-| `TIDB_PASSWORD` | TiDB password |
-| `TIDB_DATABASE` | Database name |
-
-All variables are required.
-
-**Deepgram** handles the speech-to-text. When browsers like Atlas don't support the Web Speech API, we fall back to Deepgram so the extension still works.
-
-**TiDB** is where we store your speaking style fingerprint. Here's the thing. We want to learn how you speak so we can format your text better over time. But we don't want to store what you actually say. That's your business, not ours. So instead we track things like word count, duration, speaking patterns, and other metadata that helps us understand your style without ever saving your actual words. TiDB is a MySQL-compatible database that scales really well and has a generous free tier. It's perfect for this.
-
-### Getting a Deepgram API Key
-
-1. Go to [deepgram.com](https://deepgram.com) and sign up (free tier gives you $200 in credits)
-2. In the dashboard, go to **API Keys**
-3. Click **Create a New API Key**
-4. Give it a name and select the permissions (default is fine)
-5. Copy the key. You'll need it for the Vercel deploy.
-
-### Setting Up TiDB Cloud
-
-TiDB Cloud is where your style data lives. Don't worry, setup is quick.
-
-1. Go to [tidbcloud.com](https://tidbcloud.com) and click **Sign Up**
-2. Sign in with your **GitHub account** (fastest) or use email
-3. Create a new **Serverless** cluster (free tier, no credit card needed)
-4. Pick a region close to your Vercel deployment
-5. Once created, click **Connect** on your cluster
-6. Choose **General** connection type
-7. Copy these values for Vercel:
-   - **Host** goes to `TIDB_HOST`
-   - **Port** goes to `TIDB_PORT` (usually 4000)
-   - **User** goes to `TIDB_USER`
-   - **Password** click "Generate Password" then copy to `TIDB_PASSWORD`
-8. Create a database: In the SQL Editor, run `CREATE DATABASE speakit;` and use `speakit` as your `TIDB_DATABASE`
-
-### After Deploying
-
-Update `API_BASE` in `content.js` to point to your Vercel URL:
-
-```javascript
-const API_BASE = 'https://your-app.vercel.app';
-```
-
-Then reload the extension in Chrome.
 
 ---
 
